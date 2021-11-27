@@ -18,6 +18,10 @@ client.on('messageCreate', async message => {
             message.channel.send('Bir resim eklemedin!');
             return;
         }
+        if (splits[1] != 'main' && splits[1] != 'extra' && splits[1] != 'side') {
+            message.channel.send('Deste parametresi geçersiz!');
+            return;
+        }
         for (i=0; i<deckslots.length; i++) {
             if (deckslots[i][0] == message.author.id) {
                 if (splits[1] == 'main') {
@@ -106,7 +110,7 @@ client.on('messageCreate', async message => {
         }
         var mesg = 'Deste gönderen sayısı: ' + deckslots.length;
         for (i=0; i<deckslots.length; i++) {
-            var uname = message.guild.members.cache.get(deckslots[i][0]).user.username;
+            var uname = (await message.guild.members.fetch(deckslots[i][0])).user.username;
             mesg += '\n'+uname;
             if (deckslots[i][1] == '') mesg += ' m:-';
             else mesg += ' m:+';
