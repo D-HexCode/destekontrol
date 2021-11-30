@@ -2,10 +2,12 @@ const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_MESSAGES], partials: ["CHANNEL"] });
 
 var deckslots = [];
+var logs = '';
 var prefix = '$$';
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`Logged in as ${client.user.tag}!`);
+    logs += 'Bot çalışıyor: ' + getTimeForLogs() + '\n';
 });
 
 client.on('messageCreate', async message => {
@@ -33,6 +35,7 @@ client.on('messageCreate', async message => {
                 if (splits[1] == 'side') {
                     deckslots[i][3] = message.attachments.first().url;
                 }
+                logs += message.author.username + ' ' + splits[1] +': ' + getTimeForLogs() + '\n';
                 message.channel.send('Turnuva destelerin güncellendi.');
                 return;
             }
@@ -48,6 +51,7 @@ client.on('messageCreate', async message => {
             arrnew[3] = message.attachments.first().url;
         }
         deckslots.push(arrnew);
+        logs += message.author.username + ' ' + splits[1] +': ' + getTimeForLogs() + '\n';
         message.channel.send('Turnuva katılımın oluşturuldu.');
     }
 
@@ -110,8 +114,12 @@ client.on('messageCreate', async message => {
         }
         var mesg = 'Deste gönderen sayısı: ' + deckslots.length;
         for (i=0; i<deckslots.length; i++) {
-            var uname = (await message.guild.members.fetch(deckslots[i][0])).user.username;
-            mesg += '\n'+uname;
+            if (!message.guild.members.fetch(deckslots[i][0])) {
+                mesg += '\n' + deckslots[i][0];
+            } else {
+                var uname = (await message.guild.members.fetch(deckslots[i][0])).user.username;
+                mesg += '\n' + uname;
+            }
             if (deckslots[i][1] == '') mesg += ' m:-';
             else mesg += ' m:+';
             if (deckslots[i][2] == '') mesg += ' e:-';
@@ -121,6 +129,21 @@ client.on('messageCreate', async message => {
         }
         message.channel.send(mesg);
     }
+  
+    if (splits[0] == prefix+'logs') {
+        message.channel.send(logs);
+    }
 });
+
+function getTimeForLogs(){
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    return date + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
+}
 
 client.login(process.env.BOT_TOKEN);
