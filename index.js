@@ -137,6 +137,10 @@ client.on('messageCreate', async message => {
     if (splits[0] == prefix+'author') {
         message.channel.send('HexCode#3764 tarafından kodlandım.');
     }
+    
+    if (splits[0] == prefix+'github') {
+        message.channel.send('https://github.com/D-HexCode/destekontrol');
+    }
 });
 
 function getTimeForLogs(){
