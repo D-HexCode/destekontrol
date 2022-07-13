@@ -133,6 +133,10 @@ client.on('messageCreate', async message => {
     if (splits[0] == prefix+'logs') {
         message.channel.send(logs);
     }
+
+    if (splits[0] == prefix+'author') {
+        message.channel.send('HexCode#3764 tarafından kodlandım.');
+    }
 });
 
 function getTimeForLogs(){
@@ -140,7 +144,7 @@ function getTimeForLogs(){
     let date = ("0" + date_ob.getDate()).slice(-2);
     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
     let year = date_ob.getFullYear();
-    let hours = date_ob.getHours();
+    let hours = date_ob.getHours() + 3;
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
     return date + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
