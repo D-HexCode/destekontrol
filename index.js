@@ -131,7 +131,12 @@ client.on('messageCreate', async message => {
     }
   
     if (splits[0] == prefix+'logs') {
-        message.channel.send(logs);
+        var dcMaxCharLimit = 1800;
+        var loggi = Math.floor(logs.length / dcMaxCharLimit);
+        for (i=0; i<loggi; i++) {
+            message.channel.send(logs.substring(dcMaxCharLimit*i, dcMaxCharLimit*(i+1)));
+        }
+        message.channel.send(logs.substring(dcMaxCharLimit*loggi, logs.length));
     }
 
     if (splits[0] == prefix+'author') {
